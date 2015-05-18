@@ -1,0 +1,13 @@
+#!/bin/bash
+
+OPS_PORT="$MEMSQL_PORT_9000_TCP_PORT"
+MEMSQL_PORT="$MEMSQL_PORT_3306_TCP_PORT"
+
+if [ "$OPS_PORT" == "" ]; then
+    echo "Failed to lookup link info. Ensure that you are running this"
+    echo "script in a container which is linked to a MemSQL quickstart container."
+    exit 1
+fi
+
+echo "MemSQL Ops: http://$HOST_IP:$OPS_PORT"
+echo "MemSQL:     mysql -u root -h $HOST_IP -P $MEMSQL_PORT --prompt='memsql> '"

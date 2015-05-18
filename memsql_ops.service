@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# ensure the volume is correct
+if [ ! -f /memsql/.setup ]; then
+    touch /memsql/.setup
+    cp -r /vol-template/* /memsql
+    chown -R memsql:memsql /memsql
+fi
+
+exec /sbin/setuser memsql /var/lib/memsql-ops/memsql-ops start -f >>/var/log/memsql-ops.stdout 2>&1

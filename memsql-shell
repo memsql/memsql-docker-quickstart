@@ -1,0 +1,14 @@
+#!/bin/bash
+
+MEMSQL_ADDR="${MEMSQL_PORT_3306_TCP_ADDR-127.0.0.1}"
+MEMSQL_PORT="${MEMSQL_PORT_3306_TCP_PORT-3306}"
+
+mysql -u root -h $MEMSQL_ADDR -P $MEMSQL_PORT --batch -e "select 1" >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+    exec mysql -u root -h $MEMSQL_ADDR -P $MEMSQL_PORT --prompt="memsql> "
+else
+    echo "Failed to find a MemSQL node."
+    echo "Ensure you are running this command alongside a running MemSQL "
+    echo "node or with a Docker link to a MemSQL quickstart container."
+    exit 1
+fi
