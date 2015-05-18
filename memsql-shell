@@ -5,7 +5,7 @@ MEMSQL_PORT="${MEMSQL_PORT_3306_TCP_PORT-3306}"
 
 mysql -u root -h $MEMSQL_ADDR -P $MEMSQL_PORT --batch -e "select 1" >/dev/null 2>&1
 if [ $? -eq 0 ]; then
-    exec mysql -u root -h $MEMSQL_ADDR -P $MEMSQL_PORT --prompt="memsql> "
+    exec mysql -u root -h $MEMSQL_ADDR -P $MEMSQL_PORT --prompt="memsql> " "$@"
 else
     echo "Failed to find a MemSQL node."
     echo "Ensure you are running this command alongside a running MemSQL "

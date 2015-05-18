@@ -23,6 +23,12 @@ open "http://$(boot2docker ip):9000"
 docker run --rm -it --link=memsql:memsql memsql/quickstart memsql-shell
 ```
 
+## Open a MemSQL command line shell directly on your Mac
+
+```
+mysql -u root -h $(boot2docker ip)
+```
+
 ## Stop and remove the container
 
 ```
