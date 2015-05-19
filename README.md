@@ -4,11 +4,16 @@
 docker build -t memsql/quickstart .
 ```
 
+## Verify your machine satisfies our minimum requirements
+
+```
+docker run --rm --net=host memsql/quickstart check-system
+```
+
 ## Spin up a MemSQL cluster on your machine
 
 ```
-docker pull memsql/quickstart
-docker run -d -p 3306:3306 -p 9000:9000 --name="memsql" memsql/quickstart
+docker run -d -p 3306:3306 -p 9000:9000 --name=memsql memsql/quickstart
 ```
 
 ## Open the web interface

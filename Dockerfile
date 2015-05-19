@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev
 
 # install useful python packages
-pip install memsql ipython
+RUN pip install memsql ipython psutil
 
 # configure locale
 RUN locale-gen en_US.UTF-8
@@ -47,6 +47,7 @@ ADD memsql_ops.service /etc/service/memsql-ops/run
 
 # add helper scripts
 ADD memsql-shell /usr/local/bin/memsql-shell
+ADD check-system /usr/local/bin/check-system
 
 # expose ports
 EXPOSE 3306
