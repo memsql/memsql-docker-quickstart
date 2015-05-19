@@ -11,7 +11,11 @@ CMD ["/sbin/my_init"]
 RUN apt-get update && apt-get install -y \
     libmysqlclient-dev mysql-client \
     python-dev python-pip \
-    wget jq build-essential
+    wget jq build-essential \
+    libcurl4-openssl-dev
+
+# install useful python packages
+pip install memsql ipython
 
 # configure locale
 RUN locale-gen en_US.UTF-8
@@ -43,7 +47,6 @@ ADD memsql_ops.service /etc/service/memsql-ops/run
 
 # add helper scripts
 ADD memsql-shell /usr/local/bin/memsql-shell
-ADD memsql-info /usr/local/bin/memsql-info
 
 # expose ports
 EXPOSE 3306
