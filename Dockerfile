@@ -25,6 +25,7 @@ RUN update-locale LANG=en_US.UTF-8
 RUN echo en_US.UTF-8 > /etc/container_environment/LANG
 RUN echo en_US.UTF-8 > /etc/container_environment/LC_ALL
 RUN echo en_US:en > /etc/container_environment/LANGUAGE
+RUN echo docker-quickstart > /etc/container_environment/MEMSQL_OPS_USER_AGENT_SUFFIX
 RUN chmod 755 /etc/container_environment
 RUN chmod 644 /etc/container_environment.sh
 
