@@ -77,17 +77,8 @@ def setup_test_db():
     with get_connection(db="information_schema") as conn:
         print('Creating database %s' % options.database)
 
-        try:
-            # note: the following query will fail if there is an existing database
-            conn.query('CREATE DATABASE %s' % options.database)
-        except database.MySQLError:
-            print("Database %s already exists - since we drop the database at" % options.database)
-            print("the end of this script, please specify an un-used database")
-            print("with the --database flag.")
-            sys.exit(1)
-
+        conn.query('CREATE DATABASE %s' % options.database)
         conn.query('USE %s' % options.database)
-
         conn.query('CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY, val INT)' % TABLE)
 
 def warmup():
