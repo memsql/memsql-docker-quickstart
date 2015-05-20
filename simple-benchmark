@@ -17,7 +17,7 @@ parser.add_argument("--password", default="", help="The password of the MemSQL n
 
 parser.add_argument("--database", default="simple_benchmark", help="The database to use - note: this database should not exist")
 
-parser.add_argument("--num-workers", type=int, default=5, help="The number of insert threads")
+parser.add_argument("--num-workers", type=int, default=10, help="The number of insert threads")
 parser.add_argument("--time", type=int, default=30, help="The number of seconds to run the benchmark for")
 
 options = parser.parse_args()
@@ -32,7 +32,7 @@ TABLE = "tbl"
 BATCH_SIZE = 5000
 
 # Pre-generate the workload query
-QUERY_TEXT = "INSERT INTO %s VALUES %s" % (TABLE, ",".join(["()"] * BATCH_SIZE))
+QUERY_TEXT = "INSERT INTO %s (val) VALUES %s" % (TABLE, ",".join(["(1)"] * BATCH_SIZE))
 
 def get_connection(host=None, port=None, db=options.database):
     """ Returns a new connection to the database. """
@@ -88,7 +88,7 @@ def setup_test_db():
 
         conn.query('USE %s' % options.database)
 
-        conn.query('CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY)' % TABLE)
+        conn.query('CREATE TABLE IF NOT EXISTS %s (id INT AUTO_INCREMENT PRIMARY KEY, val INT)' % TABLE)
 
 def warmup():
     print('Warming up workload')
@@ -122,7 +122,7 @@ def cleanup():
     """ Cleanup the database this benchmark is using. """
     try:
         with get_connection() as conn:
-            conn.query('DROP DATABASE %s' % options.database)
+            conn.query('DROP DATABASE IF EXISTS %s' % options.database)
     except database.MySQLError:
         pass
 
@@ -140,6 +140,8 @@ if __name__ == '__main__':
     HOST = options.host or "127.0.0.1"
     PORT = options.port or 3306
 
+    cleanup()
+
     try:
         test_connection()
         setup_test_db()
@@ -147,5 +149,3 @@ if __name__ == '__main__':
         run_benchmark()
     except KeyboardInterrupt:
         print("Interrupted... exiting...")
-    finally:
-        cleanup()
