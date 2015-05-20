@@ -3,7 +3,7 @@
 import psutil
 import sys
 
-ONE_GB = 1024 ** 3
+ONE_MB = 1024 ** 2
 
 def check_bound_port(port):
     with open("/proc/net/tcp") as tcp:
@@ -40,7 +40,7 @@ def check_bound_port(port):
 if __name__ == "__main__":
     virtual_memory = psutil.virtual_memory()
 
-    if virtual_memory.total < ONE_GB * 4:
+    if virtual_memory.total < ONE_MB * 3700:
         sys.stderr.write("Error: MemSQL requires at least 4 GB of memory to run.\n")
         sys.stderr.write("See our documentation for help.\n")
         sys.stderr.write("http://docs.memsql.com/latest/setup/docker/\n\n")
