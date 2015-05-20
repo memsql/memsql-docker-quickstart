@@ -48,6 +48,7 @@ ADD memsql_ops.service /etc/service/memsql-ops/run
 # add helper scripts
 ADD memsql-shell /usr/local/bin/memsql-shell
 ADD check-system /usr/local/bin/check-system
+ADD simple-benchmark /usr/local/bin/simple-benchmark
 
 # expose ports
 EXPOSE 3306

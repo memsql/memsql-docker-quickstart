@@ -23,6 +23,12 @@ On Mac: open "http://$(boot2docker ip):9000"
 On Windows: start "http://$(boot2docker ip):9000"
 ```
 
+## Run a quick benchmark against MemSQL
+
+```
+docker run --rm -it --link=memsql:memsql memsql/quickstart simple-benchmark
+```
+
 ## Open a MemSQL command line shell
 
 ```
