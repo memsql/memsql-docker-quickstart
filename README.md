@@ -1,7 +1,7 @@
-## Build image
+## Pull image
 
 ```
-docker build -t memsql/quickstart .
+docker pull memsql/quickstart
 ```
 
 ## Verify your machine satisfies our minimum requirements
@@ -18,9 +18,16 @@ docker run -d -p 3306:3306 -p 9000:9000 --name=memsql memsql/quickstart
 
 ## Open the web interface
 
+On Mac
+
 ```
-On Mac: open "http://$(boot2docker ip):9000"
-On Windows: start "http://$(boot2docker ip):9000"
+open "http://$(boot2docker ip):9000"
+```
+
+On Windows
+
+```
+start "http://$(boot2docker ip):9000"
 ```
 
 ## Run a quick benchmark against MemSQL
