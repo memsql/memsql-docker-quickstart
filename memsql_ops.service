@@ -7,4 +7,4 @@ if [ ! -f /memsql/.setup ]; then
     chown -R memsql:memsql /memsql
 fi
 
-exec /sbin/setuser memsql /var/lib/memsql-ops/memsql-ops start -f >>/var/log/memsql-ops.stdout 2>&1
+exec /sbin/setuser memsql /var/lib/memsql-ops/memsql-ops start --ignore-root-error -f >>/var/log/memsql-ops.stdout 2>&1

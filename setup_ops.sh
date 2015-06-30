@@ -2,10 +2,10 @@
 set -e
 set -x
 
-VERSION_URL="http://versions.memsql.com/memsql-ops/4.0.28"
+VERSION_URL="http://versions.memsql.com/memsql-ops/4.0.31"
 MEMSQL_VOLUME_PATH="/memsql"
 
-OPS_URL=$(curl -s $VERSION_URL | jq -r .tar)
+OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
 # download ops
 curl -s $OPS_URL -o /tmp/memsql_ops.tar.gz
@@ -13,7 +13,7 @@ curl -s $OPS_URL -o /tmp/memsql_ops.tar.gz
 # install ops
 mkdir /tmp/memsql-ops
 tar -xzf /tmp/memsql_ops.tar.gz -C /tmp/memsql-ops --strip-components 1
-/tmp/memsql-ops/install.sh --host 127.0.0.1 --simple-cluster --root-dir /memsql-ops
+/tmp/memsql-ops/install.sh --host 127.0.0.1 --simple-cluster --ops-datadir /memsql-ops
 
 MASTER_ID=$(memsql-ops memsql-list --memsql-role=master -q)
 MASTER_PATH=$(memsql-ops memsql-path $MASTER_ID)
