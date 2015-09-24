@@ -1,3 +1,12 @@
+MemSQL Official Docker Image
+============================
+
+The official docker image for testing MemSQL + MemSQL Ops (cluster-in-a-box).
+
+Check out the tutorial:
+http://docs.memsql.com/latest/setup/docker/
+
+
 ## Pull image
 
 ```
