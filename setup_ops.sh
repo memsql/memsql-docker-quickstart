@@ -7,6 +7,12 @@ MEMSQL_VOLUME_PATH="/memsql"
 
 OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
+# setup memsql user
+groupadd -r memsql --gid 1000
+useradd -r -g memsql -s /bin/false --uid 1000 \
+    -d /var/lib/memsql-ops -c "MemSQL Service Account" \
+    memsql
+
 # download ops
 curl -s $OPS_URL -o /tmp/memsql_ops.tar.gz
 
@@ -37,6 +43,9 @@ function setup_node_dirs {
     local node_id=$2
     local node_path=$3
 
+    # update socket file
+    memsql-ops memsql-update-config --key "socket" --value $node_path/memsql.sock $node_id
+
     mkdir -p /vol-template/$node_name
 
     for tgt in data plancache tracelogs; do
@@ -51,6 +60,8 @@ function setup_node_dirs {
 
 setup_node_dirs master $MASTER_ID $MASTER_PATH
 setup_node_dirs leaf $LEAF_ID $LEAF_PATH
+
+chown -R memsql:memsql /vol-template
 
 # cleanup
 rm -rf /tmp/memsql-ops*
