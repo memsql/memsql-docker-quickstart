@@ -39,6 +39,13 @@ def check_bound_port(port):
 
 if __name__ == "__main__":
     virtual_memory = psutil.virtual_memory()
+    cpu_count = psutil.cpu_count()
+
+    if cpu_count < 4:
+        sys.stderr.write("Error: MemSQL requires at least 4 CPU cores available.\n")
+        sys.stderr.write("See our documentation for help.\n")
+        sys.stderr.write("http://docs.memsql.com/latest/setup/docker/\n\n")
+        sys.exit(1)
 
     if virtual_memory.total < ONE_MB * 3700:
         sys.stderr.write("Error: MemSQL requires at least 4 GB of memory to run.\n")
