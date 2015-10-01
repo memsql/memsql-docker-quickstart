@@ -4,7 +4,6 @@ set -x
 
 VERSION_URL="http://versions.memsql.com/memsql-ops/4.1.7"
 MEMSQL_VOLUME_PATH="/memsql"
-
 OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
 # setup memsql user
