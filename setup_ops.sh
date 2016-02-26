@@ -2,7 +2,7 @@
 set -e
 set -x
 
-VERSION_URL="http://versions.memsql.com/memsql-ops/4.1.11"
+VERSION_URL="http://versions.memsql.com/memsql-ops/5.0.0"
 MEMSQL_VOLUME_PATH="/memsql"
 OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
