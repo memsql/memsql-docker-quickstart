@@ -2,7 +2,7 @@
 set -e
 set -x
 
-VERSION_URL="http://versions.memsql.com/memsql-ops/5.0.2"
+VERSION_URL="http://versions.memsql.com/memsql-ops/5.0.3"
 MEMSQL_VOLUME_PATH="/memsql"
 OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
@@ -36,7 +36,7 @@ for tgt in objdir lib; do
     ln -s $MASTER_PATH/$tgt $LEAF_PATH/$tgt
 done
 
-# setup non-immutable directories in the volume
+# setup mutable directories in the volume
 function setup_node_dirs {
     local node_name=$1
     local node_id=$2
@@ -45,11 +45,11 @@ function setup_node_dirs {
     # update socket file
     memsql-ops memsql-update-config --key "socket" --value $node_path/memsql.sock $node_id
 
-    mkdir -p /vol-template/$node_name
+    mkdir -p /memsql/$node_name
 
     for tgt in data plancache tracelogs; do
         # update the volume template
-        cp -r $node_path/$tgt /vol-template/$node_name
+        cp -r $node_path/$tgt /memsql/$node_name
 
         # symlink the dir
         rm -rf $node_path/$tgt
@@ -60,7 +60,7 @@ function setup_node_dirs {
 setup_node_dirs master $MASTER_ID $MASTER_PATH
 setup_node_dirs leaf $LEAF_ID $LEAF_PATH
 
-chown -R memsql:memsql /vol-template
+chown -R memsql:memsql /memsql /memsql-ops
 
 # cleanup
 rm -rf /tmp/memsql-ops*

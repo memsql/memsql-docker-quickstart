@@ -4,56 +4,51 @@
 # https://github.com/memsql/memsql-docker-quickstart
 #
 
-# Based on Phusion's baseimage
-FROM phusion/baseimage:0.9.16
-CMD ["/sbin/my_init"]
+FROM debian:8.4
+MAINTAINER Carl Sverre <carl@memsql.com>
 
-RUN apt-get update && apt-get install -y \
-    libmysqlclient-dev mysql-client \
-    python-dev python-pip \
-    wget jq build-essential \
-    libcurl4-openssl-dev
+RUN apt-get update && \
+    apt-get install -y \
+        libmysqlclient-dev \
+        mysql-client \
+        curl \
+        jq \
+        python-dev \
+        python-pip && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # install useful python packages
 RUN pip install memsql ipython psutil
 
-# configure locale
-RUN locale-gen en_US.UTF-8
-RUN update-locale LANG=en_US.UTF-8
-
-# configure environment
-RUN echo en_US.UTF-8 > /etc/container_environment/LANG
-RUN echo en_US.UTF-8 > /etc/container_environment/LC_ALL
-RUN echo en_US:en > /etc/container_environment/LANGUAGE
-RUN echo docker-quickstart > /etc/container_environment/MEMSQL_OPS_USER_AGENT_SUFFIX
-RUN chmod 755 /etc/container_environment
-RUN chmod 644 /etc/container_environment.sh
+# configure locale for utf-8
+RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+ENV LANG en_US.utf8
 
 # set UTC
 RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
 # setup directories
-RUN mkdir /memsql /memsql-ops /vol-template
+RUN mkdir /memsql /memsql-ops
 
 # download and install MemSQL Ops
 # then reduce size by symlinking objdir and lib from one install to the other
-ADD setup_ops.sh /tmp/setup_ops.sh
+COPY setup_ops.sh /tmp/setup_ops.sh
 RUN /tmp/setup_ops.sh
+
+# COPY helper scripts
+COPY memsql-shell /usr/local/bin/memsql-shell
+COPY check-system /usr/local/bin/check-system
+COPY simple-benchmark /usr/local/bin/simple-benchmark
 
 VOLUME ["/memsql"]
 
-# setup MemSQL Ops service
-RUN mkdir /etc/service/memsql-ops
-ADD memsql_ops.service /etc/service/memsql-ops/run
+COPY memsql-entrypoint.sh /
 
-# add helper scripts
-ADD memsql-shell /usr/local/bin/memsql-shell
-ADD check-system /usr/local/bin/check-system
-ADD simple-benchmark /usr/local/bin/simple-benchmark
+ENTRYPOINT ["/memsql-entrypoint.sh"]
+CMD ["memsqld"]
 
 # expose ports
 EXPOSE 3306
 EXPOSE 9000
-
-# Clean up APT
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
