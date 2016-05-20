@@ -8,7 +8,7 @@ if [ "$1" = "memsqld" ]; then
     memsql-ops memsql-list
 
     # Tail the logs to keep the container alive
-    exec tail -F /memsql/master/tracelogs/memsql.log
+    exec tail -F /memsql/master/tracelogs/memsql.log /memsql/leaf/tracelogs/memsql.log
 fi
 
 exec "$@"
