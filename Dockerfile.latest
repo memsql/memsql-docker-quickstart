@@ -1,0 +1,1 @@
+FROM memsql/quickstart:builder

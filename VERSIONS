@@ -1,0 +1,2 @@
+export OPS_VERSION=5.5.0-beta1
+export MEMSQL_VERSION=9f2d5ba6558efea076ebb6c72a33d59160ba9e53

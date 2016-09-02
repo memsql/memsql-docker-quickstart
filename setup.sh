@@ -2,7 +2,10 @@
 set -e
 set -x
 
-VERSION_URL="http://versions.memsql.com/memsql-ops/5.1.0"
+# Expects this file to export $OPS_VERSION and $MEMSQL_VERSION
+source /tmp/VERSIONS
+
+VERSION_URL="http://versions.memsql.com/memsql-ops/$OPS_VERSION"
 MEMSQL_VOLUME_PATH="/memsql"
 OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
@@ -24,8 +27,13 @@ tar -xzf /tmp/memsql_ops.tar.gz -C /tmp/memsql-ops --strip-components 1
     --ops-datadir /memsql-ops \
     --memsql-installs-dir /memsql-ops/installs
 
-memsql-ops memsql-deploy --role master --version-hash 9f2d5ba6558efea076ebb6c72a33d59160ba9e53
-memsql-ops memsql-deploy --role leaf --port 3307
+DEPLOY_EXTRA_FLAGS=
+if [[ $MEMSQL_VERSION != "community" ]]; then
+    DEPLOY_EXTRA_FLAGS="--version-hash $MEMSQL_VERSION"
+fi
+
+memsql-ops memsql-deploy --role master --community-edition $DEPLOY_EXTRA_FLAGS
+memsql-ops memsql-deploy --role leaf --community-edition --port 3307 $DEPLOY_EXTRA_FLAGS
 
 MASTER_ID=$(memsql-ops memsql-list --memsql-role=master -q)
 MASTER_PATH=$(memsql-ops memsql-path $MASTER_ID)
