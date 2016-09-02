@@ -14,7 +14,7 @@ docker pull memsql/quickstart
 
 
 # Verify your machine satisfies our minimum requirements
-docker run --rm --net=host memsql/quickstart check-system
+docker run --rm memsql/quickstart check-system
 
 
 # Spin up a MemSQL cluster on your machine
