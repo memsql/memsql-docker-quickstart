@@ -20,9 +20,12 @@ mkdir /tmp/memsql-ops
 tar -xzf /tmp/memsql_ops.tar.gz -C /tmp/memsql-ops --strip-components 1
 /tmp/memsql-ops/install.sh \
     --host 127.0.0.1 \
-    --simple-cluster \
+    --no-cluster \
     --ops-datadir /memsql-ops \
     --memsql-installs-dir /memsql-ops/installs
+
+memsql-ops memsql-deploy --role master --version-hash 9f2d5ba6558efea076ebb6c72a33d59160ba9e53
+memsql-ops memsql-deploy --role leaf --port 3307
 
 MASTER_ID=$(memsql-ops memsql-list --memsql-role=master -q)
 MASTER_PATH=$(memsql-ops memsql-path $MASTER_ID)
