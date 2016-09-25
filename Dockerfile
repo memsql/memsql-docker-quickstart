@@ -4,7 +4,7 @@
 # https://github.com/memsql/memsql-docker-quickstart
 #
 
-FROM debian:8.4
+FROM debian:8.6
 MAINTAINER Carl Sverre <carl@memsql.com>
 
 RUN apt-get update && \
