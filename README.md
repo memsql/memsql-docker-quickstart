@@ -30,5 +30,15 @@ docker run --rm -it --link=memsql:memsql memsql/quickstart memsql-shell
 
 
 # Stop and remove the container
-docker stop memsql && docker rm -v memsql
+docker rm -fv memsql
+```
+
+### Custom schema file at start
+
+If you mount a SQL file to /schema.sql inside the container it will be loaded
+when the cluster is started. Example:
+
+```
+echo "CREATE DATABASE test;" > schema.sql
+docker run -d -v $(PWD)/schema.sql:/schema.sql -p 3306:3306 -p 9000:9000 --name=memsql memsql/quickstart
 ```
