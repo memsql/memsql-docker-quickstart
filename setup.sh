@@ -41,6 +41,11 @@ MASTER_PATH=$(memsql-ops memsql-path $MASTER_ID)
 LEAF_ID=$(memsql-ops memsql-list --memsql-role=leaf -q)
 LEAF_PATH=$(memsql-ops memsql-path $LEAF_ID)
 
+# We need to clear the maximum-memory setting in the leaf's memsql.cnf otherwise
+# when we move to another machine with a different amount of memory the memory
+# imbalance nag will show up
+memsql-ops memsql-update-config --key maximum_memory --delete $LEAF_ID
+
 # symlink leaf's static directories to master
 for tgt in objdir lib; do
     rm -rf $LEAF_PATH/$tgt
