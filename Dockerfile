@@ -4,7 +4,7 @@
 # https://github.com/memsql/memsql-docker-quickstart
 #
 
-FROM debian:8.4
+FROM debian:8.6
 MAINTAINER Carl Sverre <carl@memsql.com>
 
 RUN apt-get update && \
@@ -34,8 +34,9 @@ RUN mkdir /memsql /memsql-ops
 
 # download and install MemSQL Ops
 # then reduce size by symlinking objdir and lib from one install to the other
-COPY setup_ops.sh /tmp/setup_ops.sh
-RUN /tmp/setup_ops.sh
+COPY setup.sh /tmp/setup.sh
+ADD VERSIONS /tmp/VERSIONS
+RUN /tmp/setup.sh
 
 # COPY helper scripts
 COPY memsql-shell /usr/local/bin/memsql-shell

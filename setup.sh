@@ -2,7 +2,10 @@
 set -e
 set -x
 
-VERSION_URL="http://versions.memsql.com/memsql-ops/5.1.0"
+# Expects this file to export $OPS_VERSION and $MEMSQL_VERSION
+source /tmp/VERSIONS
+
+VERSION_URL="http://versions.memsql.com/memsql-ops/$OPS_VERSION"
 MEMSQL_VOLUME_PATH="/memsql"
 OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
 
@@ -20,15 +23,28 @@ mkdir /tmp/memsql-ops
 tar -xzf /tmp/memsql_ops.tar.gz -C /tmp/memsql-ops --strip-components 1
 /tmp/memsql-ops/install.sh \
     --host 127.0.0.1 \
-    --simple-cluster \
+    --no-cluster \
     --ops-datadir /memsql-ops \
     --memsql-installs-dir /memsql-ops/installs
+
+DEPLOY_EXTRA_FLAGS=
+if [[ $MEMSQL_VERSION != "community" ]]; then
+    DEPLOY_EXTRA_FLAGS="--version-hash $MEMSQL_VERSION"
+fi
+
+memsql-ops memsql-deploy --role master --community-edition $DEPLOY_EXTRA_FLAGS
+memsql-ops memsql-deploy --role leaf --community-edition --port 3307 $DEPLOY_EXTRA_FLAGS
 
 MASTER_ID=$(memsql-ops memsql-list --memsql-role=master -q)
 MASTER_PATH=$(memsql-ops memsql-path $MASTER_ID)
 
 LEAF_ID=$(memsql-ops memsql-list --memsql-role=leaf -q)
 LEAF_PATH=$(memsql-ops memsql-path $LEAF_ID)
+
+# We need to clear the maximum-memory setting in the leaf's memsql.cnf otherwise
+# when we move to another machine with a different amount of memory the memory
+# imbalance nag will show up
+memsql-ops memsql-update-config --key maximum_memory --delete $LEAF_ID
 
 # symlink leaf's static directories to master
 for tgt in objdir lib; do
