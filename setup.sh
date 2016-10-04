@@ -79,5 +79,5 @@ setup_node_dirs leaf $LEAF_ID $LEAF_PATH
 chown -R memsql:memsql /memsql /memsql-ops
 
 # cleanup
-rm -rf /tmp/memsql-ops*
+rm -rf /tmp/*
 rm -rf /memsql-ops/data/cache/*
