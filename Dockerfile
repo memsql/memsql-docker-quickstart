@@ -35,7 +35,7 @@ RUN mkdir /memsql /memsql-ops
 # download and install MemSQL Ops
 # then reduce size by symlinking objdir and lib from one install to the other
 COPY setup.sh /tmp/setup.sh
-ADD VERSIONS /tmp/VERSIONS
+COPY VERSIONS /tmp/VERSIONS
 RUN /tmp/setup.sh
 
 # COPY helper scripts
