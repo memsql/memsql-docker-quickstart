@@ -71,6 +71,9 @@ function setup_node_dirs {
         rm -rf $node_path/$tgt
         ln -s $MEMSQL_VOLUME_PATH/$node_name/$tgt $node_path/$tgt
     done
+
+    # clear the plancache
+    rm -rf /memsql/$node_name/plancache/*
 }
 
 setup_node_dirs master $MASTER_ID $MASTER_PATH
