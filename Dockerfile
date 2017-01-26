@@ -19,6 +19,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # install useful python packages
+RUN pip install --upgrade pip
 RUN pip install memsql ipython psutil
 
 # configure locale for utf-8
