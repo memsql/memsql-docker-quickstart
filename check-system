@@ -65,4 +65,4 @@ if __name__ == "__main__":
         sys.stderr.write("http://docs.memsql.com/latest/setup/docker/\n\n")
         sys.exit(1)
 
-    print("Everything looks good.")
+    print("System check successful.")
