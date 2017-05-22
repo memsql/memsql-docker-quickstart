@@ -33,6 +33,32 @@ docker run --rm -it --link=memsql:memsql memsql/quickstart memsql-shell
 docker rm -fv memsql
 ```
 
+### Persistent data (using Docker volumes)
+
+The image is setup to write all data for the MemSQL nodes into the `/memsql`
+directory inside the container.  This makes it easy to mount all of the
+persistent data into a Docker volume.  For example, the following command will
+start a new MemSQL quickstart container and save the data into a Docker named
+volume called `memsql`.
+
+```
+docker run -d -p 3306:3306 -p 9000:9000 -v memsql:/memsql --name=memsql memsql/quickstart
+```
+
+If you want to mount any directory on the host machine - the directory first
+needs to be initialized.  You can do this like so:
+
+```
+mkdir /host/data
+docker run --rm -v /host/data:/template memsql/quickstart cp -r /memsql /template
+```
+
+And then you can mount it into the quickstart container over `/memsql`:
+
+```
+docker run -d -p 3306:3306 -p 9000:9000 -v /host/data:/memsql --name=memsql memsql/quickstart
+```
+
 ### Custom schema file at start
 
 If you mount a SQL file to /schema.sql inside the container it will be loaded
