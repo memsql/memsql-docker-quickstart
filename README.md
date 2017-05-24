@@ -50,7 +50,7 @@ needs to be initialized.  You can do this like so:
 
 ```
 mkdir /host/data
-docker run --rm -v /host/data:/template memsql/quickstart cp -r /memsql /template
+docker run --rm -v $(pwd)/data:/template memsql/quickstart /bin/bash -c 'cp -r /memsql/* /template && chown -R 1000:1000 /template'
 ```
 
 And then you can mount it into the quickstart container over `/memsql`:
