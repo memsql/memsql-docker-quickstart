@@ -68,3 +68,15 @@ when the cluster is started. Example:
 echo "CREATE DATABASE test;" > schema.sql
 docker run -d -v $(PWD)/schema.sql:/schema.sql -p 3306:3306 -p 9000:9000 --name=memsql memsql/quickstart
 ```
+
+### Ignore system requirements check
+
+MemSQL is designed to run on machines with minimum systems requirements. Please read
+[this article](https://help.memsql.com/hc/en-us/articles/115001215583-My-hosts-have-less-than-minimum-MemSQL-system-requirements-How-can-I-make-MemSQL-run-on-those-hosts-) 
+to understand how disabling this check could lead to a less ideal experience. If you
+understand the risk you may disable the check by passing in a `IGNORE_MIN_REQUIREMENTS=1`
+Docker environment variable:
+
+```
+docker run -d -p 3306:3306 -p 9000:9000 --name=memsql -e IGNORE_MIN_REQUIREMENTS=1 memsql/quickstart
+```
