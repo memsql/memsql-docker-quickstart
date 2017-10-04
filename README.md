@@ -33,6 +33,16 @@ docker run --rm -it --link=memsql:memsql memsql/quickstart memsql-shell
 docker rm -fv memsql
 ```
 
+### Recommended system settings
+
+It is recommended to run MemSQL and MemSQL Ops with a couple of specific system settings.  The full set of settings are documented here: https://docs.memsql.com/tutorials/v5.8/installation-best-practices/
+
+One option is to set the settings when you run the container.  For example you can do something like this to setup the recommended sysctl settings:
+
+```
+docker run -d --sysctl net.core.somaxconn=1024 --sysctl vm.min_free_kbytes=2639550 -p 3306:3306 -p 9000:9000 -v memsql:/memsql --name=memsql memsql/quickstart  
+```
+
 ### Persistent data (using Docker volumes)
 
 The image is setup to write all data for the MemSQL nodes into the `/memsql`
