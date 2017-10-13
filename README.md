@@ -20,6 +20,8 @@ docker run --rm memsql/quickstart check-system
 # Spin up a MemSQL cluster on your machine
 docker run -d -p 3306:3306 -p 9000:9000 --name=memsql memsql/quickstart
 
+# You might need to wait several seconds for your MemSQL cluster to start
+# before you can connect to it.
 
 # Run a quick benchmark against MemSQL
 docker run --rm -it --link=memsql:memsql memsql/quickstart simple-benchmark
