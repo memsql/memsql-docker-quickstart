@@ -7,7 +7,7 @@ source /tmp/VERSIONS
 
 VERSION_URL="http://versions.memsql.com/memsql-ops/$OPS_VERSION"
 MEMSQL_VOLUME_PATH="/memsql"
-OPS_URL=$(curl -s "$VERSION_URL" | jq -r .tar)
+OPS_URL=$(curl -s "$VERSION_URL" | jq -r .payload.tar)
 
 # setup memsql user
 groupadd -r memsql --gid 1000
