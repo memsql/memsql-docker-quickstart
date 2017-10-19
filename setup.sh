@@ -28,12 +28,12 @@ tar -xzf /tmp/memsql_ops.tar.gz -C /tmp/memsql-ops --strip-components 1
     --memsql-installs-dir /memsql-ops/installs
 
 DEPLOY_EXTRA_FLAGS=
-if [[ $MEMSQL_VERSION != "community" ]]; then
+if [[ $MEMSQL_VERSION != "developer" ]]; then
     DEPLOY_EXTRA_FLAGS="--version-hash $MEMSQL_VERSION"
 fi
 
-memsql-ops memsql-deploy --role master --community-edition $DEPLOY_EXTRA_FLAGS
-memsql-ops memsql-deploy --role leaf --community-edition --port 3307 $DEPLOY_EXTRA_FLAGS
+memsql-ops memsql-deploy --role master --developer-edition $DEPLOY_EXTRA_FLAGS
+memsql-ops memsql-deploy --role leaf --developer-edition --port 3307 $DEPLOY_EXTRA_FLAGS
 
 MASTER_ID=$(memsql-ops memsql-list --memsql-role=master -q)
 MASTER_PATH=$(memsql-ops memsql-path $MASTER_ID)
