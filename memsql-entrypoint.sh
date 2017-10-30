@@ -3,10 +3,10 @@ set -e
 
 if [[ "$1" = "memsqld" ]]; then
     memsql-ops start
-    
+
     #Eliminate Minimum Core Count Requirement
-    memsql-ops memsql-update-config --all --key minimum_core_count --value 0	
-    
+    memsql-ops memsql-update-config --all --key minimum_core_count --value 0
+
     if [[ "$IGNORE_MIN_REQUIREMENTS" = "1" ]]; then
         memsql-ops memsql-update-config --all --key minimum_memory_mb --value 0
     fi
