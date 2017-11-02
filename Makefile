@@ -1,3 +1,3 @@
 .PHONY: latest
 latest:
-	docker build -t memsql/quickstart:latest -f Dockerfile .
+	docker build -t memsql/quickstart:minimal -f Dockerfile .

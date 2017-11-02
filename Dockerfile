@@ -1,56 +1,60 @@
 #
-# MemSQL Quickstart Dockerfile
+# MemSQL Quickstart Minimal Dockerfile
 #
 # https://github.com/memsql/memsql-docker-quickstart
 #
 
-FROM debian:8.6
+FROM debian:jessie-slim
 MAINTAINER Carl Sverre <carl@memsql.com>
 
-RUN apt-get update && \
-    apt-get install -y \
-        libmysqlclient-dev \
-        mysql-client \
-        curl \
-        jq \
-        python-dev \
-        python-pip && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update \
+ && apt-get install -y \
+    curl \
+    mysql-client \
+    rsync \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# install useful python packages
-RUN pip install --upgrade pip
-RUN pip install memsql ipython psutil
-
-# configure locale for utf-8
-RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-ENV LANG en_US.utf8
+# install dumb-init
+ENV DUMB_INIT_VERSION 1.2.0
+ENV DUMB_INIT_URL https://github.com/Yelp/dumb-init/releases/download/v${DUMB_INIT_VERSION}/dumb-init_${DUMB_INIT_VERSION}_amd64.deb
+RUN curl -sL $DUMB_INIT_URL > /tmp/dumb_init.deb \
+ && dpkg -i /tmp/dumb_init.deb \
+ && rm /tmp/dumb_init.deb
 
 # set UTC
 RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 
-# setup directories
-RUN mkdir /memsql /memsql-ops
+# setup user
+RUN useradd -M memsql
 
-# download and install MemSQL Ops
-# then reduce size by symlinking objdir and lib from one install to the other
-COPY setup.sh /tmp/setup.sh
-COPY VERSIONS /tmp/VERSIONS
-RUN /tmp/setup.sh
+# setup MemSQL
+ENV MEMSQL_VERSION 072681fe6518f2003d30a206717c0d72cdb1e52c
+ENV MEMSQL_DL_URL http://download.memsql.com/releases/commit/$MEMSQL_VERSION/memsqlbin_amd64.tar.gz
+RUN curl -sL $MEMSQL_DL_URL > /tmp/memsqlbin_amd64.tar.gz \
+ && tar -xzf /tmp/memsqlbin_amd64.tar.gz \
+ && mv memsqlbin master \
+ && cp -r master leaf \
+ && rm /tmp/memsqlbin_amd64.tar.gz
 
-# COPY helper scripts
-COPY memsql-shell /usr/local/bin/memsql-shell
-COPY check-system /usr/local/bin/check-system
-COPY simple-benchmark /usr/local/bin/simple-benchmark
+# compile internal tables
+RUN mkdir -p /cache/master /cache/leaf /cache/tmp \
+ && chown -R memsql:memsql /cache \
+ && /master/memsqld --user=memsql --port=3523 --plancachedir=/cache/master --tracelogsdir=/cache/tmp --datadir=/cache/tmp --init-memsql-db-only \
+ && /leaf/memsqld --user=memsql --port=3523 --plancachedir=/cache/leaf --tracelogsdir=/cache/tmp --datadir=/cache/tmp --init-memsql-db-only \
+ && rm -r /cache/tmp
 
-VOLUME ["/memsql"]
+ADD config/master.cnf /master/memsql.cnf
+ADD config/leaf.cnf /leaf/memsql.cnf
 
-COPY memsql-entrypoint.sh /
+# setup volumes
+RUN mkdir /state
+VOLUME /state
 
 ENTRYPOINT ["/memsql-entrypoint.sh"]
 CMD ["memsqld"]
 
-# expose ports
+# expose port
 EXPOSE 3306
-EXPOSE 9000
+
+COPY memsql-entrypoint.sh /

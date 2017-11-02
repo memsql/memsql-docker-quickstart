@@ -1,0 +1,37 @@
+[server]
+
+; -----------------------------
+; MemSQL configuration options:
+; -----------------------------
+
+; The transaction buffer is a per-database, in-memory buffer of the
+; transaction log. By default, it is asynchronously flushed to disk.
+; You can set it to 0 for synchronous durability (transactions are
+; flushed on commit). A positive value sets the size of the buffer.
+transaction-buffer  = 64m
+
+; snapshot-trigger-size indicates the size of the transaction
+; log at which MemSQL starts a snapshot and truncates the log
+snapshot-trigger-size = 256m
+
+; ---------------------------------
+; MySQL-style configuration options
+; ---------------------------------
+
+basedir             = .
+tmpdir              = .
+lc-messages-dir     = ./share
+socket              = memsql.sock
+port                = 3306
+lock_wait_timeout   = 60
+bind-address        = 0.0.0.0
+core-file
+
+; ---------------------------------
+; Move our state into /state
+; To make docker volume usage nicer
+; ---------------------------------
+
+datadir             = /state/master/data
+plancachedir        = /state/master/plancache
+tracelogsdir        = /state/master/tracelogs
