@@ -1,12 +1,17 @@
 MemSQL Official (Minimal) Docker Image
 ======================================
 
-This is a beta image that spins up very fast and is more suited to testing or
-playing around with MemSQL.  Check out our Master branch for the official image
-that has more features.
+This is a Docker image that spins up very fast and is suited to testing or
+playing around with MemSQL. This image includes our Developer license which is
+not to be used in a production environment.  If you want to evaluate MemSQL for
+a production environment you can download our Enterprise Trial here:
+https://www.memsql.com/download/
 
 ```bash
-# Build the minimal image
+# Download the latest version of the minimal image
+docker pull memsql/quickstart:minimal
+
+# Make the image locally
 make
 
 # Run the minimal image
