@@ -11,12 +11,16 @@ https://www.memsql.com/download/
 # Download the latest version of the minimal image
 docker pull memsql/quickstart:minimal
 
-# Make the image locally
-make
-
 # Run the minimal image
 docker run -d --name memsql -p3306:3306 memsql/quickstart:minimal
 
 # Mount the data somewhere if you want to keep it around after killing the container
 docker run -d --name memsql -v /host/path/to/state:/state memsql/quickstart:minimal
+```
+
+You can also build the Docker image locally after checking out this branch:
+
+```
+# Make the image locally
+make
 ```
