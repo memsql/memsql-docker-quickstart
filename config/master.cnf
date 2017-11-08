@@ -26,6 +26,8 @@ port                = 3306
 lock_wait_timeout   = 60
 bind-address        = 0.0.0.0
 core-file
+minimum_core_count  = 0
+minimum_memory_mb   = 0
 
 ; ---------------------------------
 ; Move our state into /state
