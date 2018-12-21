@@ -29,7 +29,7 @@ RUN ln -sf /usr/share/zoneinfo/UTC /etc/localtime
 RUN useradd -M memsql
 
 # setup MemSQL
-ENV MEMSQL_VERSION 841eb693c06a33f870ca46c9e2b47fdd65b7f9bd
+ENV MEMSQL_VERSION 7669a637baaad808f22bb0bd5feeafbd9ea2621c
 ENV MEMSQL_DL_URL http://download.memsql.com/releases/commit/$MEMSQL_VERSION/memsqlbin_amd64.tar.gz
 RUN curl -sL $MEMSQL_DL_URL > /tmp/memsqlbin_amd64.tar.gz \
  && tar -xzf /tmp/memsqlbin_amd64.tar.gz \
