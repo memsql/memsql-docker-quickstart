@@ -1,12 +1,16 @@
-MemSQL Official Docker Image
+This Image has been Deprecated
 ============================
 
-The official docker image for testing MemSQL + MemSQL Ops (cluster-in-a-box).
+### Please use the official Docker image for testing MemSQL: 
+https://cloud.docker.com/u/memsql/repository/docker/memsql/cluster-in-a-box
 
-Check out the tutorial:
-http://docs.memsql.com/docs/quick-start-with-docker/
+### And the official Tutorial for running MemSQL with Docker: 
+https://docs.memsql.com/guides/latest/install-memsql/on-premises/cluster-in-a-box/docker/step-1/
 
-### Example usage
+
+
+
+### Deprecated Example usage
 
 ```
 # Pull the image
@@ -30,7 +34,7 @@ docker run --rm -it --link=memsql:memsql memsql/quickstart memsql-shell
 
 
 # Stop and remove the container
-docker rm -fv memsql
+docker stop memsql && docker rm -v memsql
 ```
 
 ### Recommended system settings
