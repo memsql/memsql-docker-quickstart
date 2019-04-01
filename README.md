@@ -2,7 +2,7 @@ This Image has been Deprecated
 ============================
 
 ### Please use the official Docker image for testing MemSQL: 
-https://cloud.docker.com/u/memsql/repository/docker/memsql/cluster-in-a-box
+https://hub.docker.com/r/memsql/cluster-in-a-box/
 
 ### And the official Tutorial for running MemSQL with Docker: 
 https://docs.memsql.com/guides/latest/install-memsql/on-premises/cluster-in-a-box/docker/step-1/
