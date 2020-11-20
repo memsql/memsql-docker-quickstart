@@ -5,7 +5,7 @@ This Image has been Deprecated
 https://hub.docker.com/r/memsql/cluster-in-a-box/
 
 ### And the official Tutorial for running MemSQL with Docker: 
-https://docs.memsql.com/guides/latest/install-memsql/on-premises/cluster-in-a-box/docker/step-1/
+https://docs.singlestore.com/latest/guides/deploy-memsql/self-managed/docker/
 
 
 
